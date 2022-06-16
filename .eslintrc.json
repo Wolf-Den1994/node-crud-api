@@ -11,6 +11,8 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "import/prefer-default-export": "off",
+    "import/no-default-export": "error",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -18,7 +20,9 @@
         "js": "never",
         "ts": "never"
       }
-    ]
+    ],
+    "no-console": "off",
+    "max-len": ["error", { "code": 120 }]
   },
   "settings": {
     "import/resolver": {
