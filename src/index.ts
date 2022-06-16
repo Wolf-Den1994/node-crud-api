@@ -1,7 +1,7 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { uuidValidateV4 } from './utils/common';
 import {
-  getUsers, getUser, errorRouteNotFound, errorNotValidId,
+  getUsers, getUser, errorRouteNotFound, errorNotValidId, createUser,
 } from './controllers/userController';
 
 const PORT = process.env.PORT || 4000;
@@ -21,6 +21,8 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
     } else {
       errorNotValidId(req, res);
     }
+  } else if (route === '/api/users' && method === 'POST') {
+    createUser(req, res);
   } else {
     errorRouteNotFound(req, res);
   }

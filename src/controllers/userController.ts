@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { findAll, findById } from '../models/userModel';
+import { checkArray, getPostData } from '../utils/common';
+import { findAll, findById, create } from '../models/userModel';
 
 // @desc  Gets All Users
 // @route GET /api/users
@@ -36,19 +37,50 @@ export const getUser = async (
   }
 };
 
-export const errorRouteNotFound = async (req: IncomingMessage, res: ServerResponse) => {
+// @desc  Create a User
+// @route POST /api/users
+export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
   try {
-    res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: 'Route Not Found' }));
+    const body = await getPostData(req);
+    const { username, age, hobbies } = JSON.parse(body);
+
+    if (typeof username === 'string' && typeof age === 'number' && checkArray(hobbies)) {
+      const user = {
+        username,
+        age,
+        hobbies,
+      };
+
+      const newUser = await create(user);
+
+      res.writeHead(201, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(newUser));
+    } else {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Body doen\'nt contain required fields' }));
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
+// @desc  Gets Single User
+// @route GET /api/users/:id
 export const errorNotValidId = async (req: IncomingMessage, res: ServerResponse) => {
   try {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'Not Valid id' }));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// @desc  Check any routes
+// @route any
+export const errorRouteNotFound = async (req: IncomingMessage, res: ServerResponse) => {
+  try {
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: 'Route Not Found' }));
   } catch (error) {
     console.log(error);
   }

@@ -1,4 +1,5 @@
-import { IUser } from '../types/types';
+import { v4 as uuidv4 } from 'uuid';
+import { IUser, IUserPost } from '../types/types';
 
 const users: IUser[] = [
   {
@@ -21,6 +22,16 @@ export const findById = (userId: string) => new Promise((res, rej) => {
   try {
     const user = users.find(({ id }) => userId === id);
     res(user);
+  } catch (error) {
+    rej(error);
+  }
+});
+
+export const create = (user: IUserPost) => new Promise((res, rej) => {
+  try {
+    const newUser: IUser = { id: uuidv4(), ...user };
+    users.push(newUser);
+    res(newUser);
   } catch (error) {
     rej(error);
   }
