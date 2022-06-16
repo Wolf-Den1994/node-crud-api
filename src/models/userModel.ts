@@ -18,10 +18,10 @@ export const findAll = () => new Promise((res, rej) => {
   }
 });
 
-export const findById = (userId: string) => new Promise((res, rej) => {
+export const findById = (userId: string): Promise<IUser> => new Promise((res, rej) => {
   try {
     const user = users.find(({ id }) => userId === id);
-    res(user);
+    if (user) res(user);
   } catch (error) {
     rej(error);
   }
@@ -32,6 +32,16 @@ export const create = (user: IUserPost) => new Promise((res, rej) => {
     const newUser: IUser = { id: uuidv4(), ...user };
     users.push(newUser);
     res(newUser);
+  } catch (error) {
+    rej(error);
+  }
+});
+
+export const update = (userId: string, user: IUserPost) => new Promise((res, rej) => {
+  try {
+    const index = users.findIndex(({ id }) => userId === id);
+    users[index] = { id: userId, ...user };
+    res(users[index]);
   } catch (error) {
     rej(error);
   }

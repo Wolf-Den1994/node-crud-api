@@ -22,3 +22,8 @@ export const getPostData = (req: IncomingMessage): Promise<string> => new Promis
     rej(error);
   }
 });
+
+export const parseUrl = (url: string | undefined) => url?.split('/').reduce((acc, cur, idx) => {
+  if (idx < 3) return `${acc + cur}/`;
+  return acc;
+}, '');
