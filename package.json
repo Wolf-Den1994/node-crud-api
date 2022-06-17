@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "cross-env NODE_ENV=development nodemon",
     "start:prod": "cross-env NODE_ENV=production tsc && node dist/index.js",
-    "lint": "eslint src",
-    "lintfix": "npm run lint -- --fix",
+    "lint": "eslint \"src/**/*.{ts,js}\"",
+    "lintfix": "npm run lint -- --fix"
   },
   "author": "Denis",
   "license": "ISC",
