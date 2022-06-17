@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { checkArray, getPostData } from '../utils/common';
 import {
-  findAll, findById, create, update,
+  findAll, findById, create, update, remove,
 } from '../models/userModel';
 
 // @desc  Gets Error with NOT FOUND
@@ -37,7 +37,6 @@ export const getUser = async (
 ) => {
   try {
     const user = await findById(id);
-
     if (!user) {
       errorNotFoundUser(req, res);
     } else {
@@ -45,7 +44,7 @@ export const getUser = async (
       res.end(JSON.stringify(user));
     }
   } catch (error) {
-    console.log(error);
+    errorNotFoundUser(req, res);
   }
 };
 
@@ -106,6 +105,28 @@ export const updateUser = async (req: IncomingMessage, res: ServerResponse, id: 
   }
 
   return ServerResponse;
+};
+
+// @desc  Delete User
+// @route DELETE /api/users/:id
+export const deleteUser = async (
+  req: IncomingMessage,
+  res: ServerResponse,
+  id: string,
+) => {
+  try {
+    const user = await findById(id);
+
+    if (!user) {
+      errorNotFoundUser(req, res);
+    } else {
+      await remove(id);
+      res.writeHead(204, { 'Content-Type': 'application/json' });
+      res.end();
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // @desc  Gets Error with valid ID
