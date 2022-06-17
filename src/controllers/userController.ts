@@ -6,7 +6,10 @@ import {
 
 // @desc  Gets Error with NOT FOUND
 // @route GET /api/users/:id
-export const errorNotFoundUser = async (req: IncomingMessage, res: ServerResponse) => {
+export const errorNotFoundUser = async (
+  req: IncomingMessage,
+  res: ServerResponse,
+) => {
   try {
     res.writeHead(404, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'User Not Found' }));
@@ -55,7 +58,11 @@ export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
     const body = await getPostData(req);
     const { username, age, hobbies } = JSON.parse(body);
 
-    if (typeof username === 'string' && typeof age === 'number' && checkArray(hobbies)) {
+    if (
+      typeof username === 'string'
+      && typeof age === 'number'
+      && checkArray(hobbies)
+    ) {
       const user = {
         username,
         age,
@@ -69,7 +76,9 @@ export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
     }
 
     res.writeHead(400, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: 'Body doen\'nt contain required fields' }));
+    res.end(
+      JSON.stringify({ message: "Body doen'nt contain required fields" }),
+    );
   } catch (error) {
     console.log(error);
   }
@@ -79,7 +88,11 @@ export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
 
 // @desc  Update a User
 // @route PUT /api/users/:id
-export const updateUser = async (req: IncomingMessage, res: ServerResponse, id: string) => {
+export const updateUser = async (
+  req: IncomingMessage,
+  res: ServerResponse,
+  id: string,
+) => {
   try {
     const user = await findById(id);
 
@@ -88,6 +101,17 @@ export const updateUser = async (req: IncomingMessage, res: ServerResponse, id: 
     } else {
       const body = await getPostData(req);
       const { username, age, hobbies } = JSON.parse(body);
+
+      if (
+        (typeof username !== 'string' && username)
+        || (typeof age !== 'number' && age)
+        || (hobbies && !checkArray(hobbies))
+      ) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(
+          JSON.stringify({ message: "Body doen'nt contain required fields" }),
+        );
+      }
 
       const userData = {
         username: username || user.username,
@@ -131,7 +155,10 @@ export const deleteUser = async (
 
 // @desc  Gets Error with valid ID
 // @route GET /api/users/:id
-export const errorNotValidId = async (req: IncomingMessage, res: ServerResponse) => {
+export const errorNotValidId = async (
+  req: IncomingMessage,
+  res: ServerResponse,
+) => {
   try {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'Not Valid id' }));
@@ -142,7 +169,10 @@ export const errorNotValidId = async (req: IncomingMessage, res: ServerResponse)
 
 // @desc  Check any routes
 // @route any
-export const errorRouteNotFound = async (req: IncomingMessage, res: ServerResponse) => {
+export const errorRouteNotFound = async (
+  req: IncomingMessage,
+  res: ServerResponse,
+) => {
   try {
     res.writeHead(404, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'Route Not Found' }));
