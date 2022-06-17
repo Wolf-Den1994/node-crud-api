@@ -101,7 +101,7 @@ export const updateUser = async (req: IncomingMessage, res: ServerResponse, id: 
       return res.end(JSON.stringify(udpUser));
     }
   } catch (error) {
-    console.log(error);
+    errorNotFoundUser(req, res);
   }
 
   return ServerResponse;
@@ -125,7 +125,7 @@ export const deleteUser = async (
       res.end();
     }
   } catch (error) {
-    console.log(error);
+    errorNotFoundUser(req, res);
   }
 };
 

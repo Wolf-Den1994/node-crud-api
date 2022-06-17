@@ -11,14 +11,11 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
   const parseRoute = parseUrl(route)?.replace(/\/$|\/*$/g, '');
   const routeId = req.url?.split('/')[3];
   const method = req.method || '';
-  console.log('parseRoute', parseRoute);
-  console.log('routeId', routeId);
 
   if (route === '/api/users' && !routeId && method === 'GET') {
     getUsers(req, res);
   } else if (parseRoute === '/api/users' && routeId && method === 'GET') {
     const valide = uuidValidateV4(routeId);
-    console.log('valide', valide);
     if (valide) {
       getUser(req, res, routeId);
     } else {

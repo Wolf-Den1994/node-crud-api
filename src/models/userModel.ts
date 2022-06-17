@@ -14,7 +14,6 @@ export const findAll = () => new Promise((res, rej) => {
 export const findById = (userId: string): Promise<IUser> => new Promise((res, rej) => {
   try {
     const user = users.find(({ id }) => userId === id);
-    console.log('user3333', user);
     if (user) res(user);
     throw new Error('User Not Found');
   } catch (error) {
@@ -45,7 +44,6 @@ export const update = (userId: string, user: IUserPost) => new Promise((res, rej
 export const remove = (userId: string) => new Promise((res, rej) => {
   try {
     const index = users.findIndex(({ id }) => userId === id);
-    console.log('d', index);
     users.splice(index, 1);
     res(users[index]);
   } catch (error) {
