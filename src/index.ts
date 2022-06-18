@@ -14,7 +14,7 @@ export const server = createServer((req: IncomingMessage, res: ServerResponse) =
   const method = req.method || '';
 
   console.log('Current process:', process.pid);
-  console.log('route', route);
+
   if (route === '/api/users' && !routeId && method === 'GET') {
     getUsers(req, res);
   } else if (parseRoute === '/api/users' && routeId && method === 'GET') {
