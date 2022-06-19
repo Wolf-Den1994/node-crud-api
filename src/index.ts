@@ -4,8 +4,11 @@ import {
   getUsers, getUser, errorRouteNotFound, errorNotValidId, createUser, updateUser, deleteUser, handleErrorServer,
 } from './controllers/userController';
 import { createProcesses } from './cluster';
+import {
+  defaultPort, Processes, ApiRoute, RestMethod,
+} from './types/constants';
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || defaultPort;
 
 export const server = createServer((req: IncomingMessage, res: ServerResponse) => {
   try {
@@ -14,27 +17,27 @@ export const server = createServer((req: IncomingMessage, res: ServerResponse) =
     const routeId = req.url?.split('/')[3];
     const method = req.method || '';
 
-    console.log('Current process:', process.pid);
+    console.log(Processes.Current, process.pid);
 
-    if (route === '/api/users' && !routeId && method === 'GET') {
+    if (route === ApiRoute.Main && !routeId && method === RestMethod.GET) {
       getUsers(req, res);
-    } else if (parseRoute === '/api/users' && routeId && method === 'GET') {
+    } else if (parseRoute === ApiRoute.Main && routeId && method === RestMethod.GET) {
       const valide = uuidValidateV4(routeId);
       if (valide) {
         getUser(req, res, routeId);
       } else {
         errorNotValidId(req, res);
       }
-    } else if (route === '/api/users' && method === 'POST') {
+    } else if (route === ApiRoute.Main && method === RestMethod.POST) {
       createUser(req, res);
-    } else if (parseRoute === '/api/users' && routeId && method === 'PUT') {
+    } else if (parseRoute === ApiRoute.Main && routeId && method === RestMethod.PUT) {
       const valide = uuidValidateV4(routeId);
       if (valide) {
         updateUser(req, res, routeId);
       } else {
         errorNotValidId(req, res);
       }
-    } else if (parseRoute === '/api/users' && routeId && method === 'DELETE') {
+    } else if (parseRoute === ApiRoute.Main && routeId && method === RestMethod.DELETE) {
       const valide = uuidValidateV4(routeId);
       if (valide) {
         deleteUser(req, res, routeId);
@@ -52,10 +55,10 @@ export const server = createServer((req: IncomingMessage, res: ServerResponse) =
 if (process.env.NODE_MULTI) {
   createProcesses(() => {
     server.listen(PORT, () => {
-      console.log(`Server is runnig on port ${PORT}`);
-      console.log('Current process:', process.pid);
+      console.log(`${Processes.Run} ${PORT}`);
+      console.log(Processes.Current, process.pid);
     });
   });
 } else {
-  server.listen(PORT, () => console.log(`Server is runnig on port ${PORT}`));
+  server.listen(PORT, () => console.log(`${Processes.Run} ${PORT}`));
 }

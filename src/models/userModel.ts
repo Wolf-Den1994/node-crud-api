@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { IUser, IUserPost } from '../types/types';
+import { MessageForUser } from '../types/constants';
 
 const users: IUser[] = [];
 
@@ -15,7 +16,7 @@ export const findById = (userId: string): Promise<IUser> => new Promise((res, re
   try {
     const user = users.find(({ id }) => userId === id);
     if (user) res(user);
-    throw new Error('User Not Found');
+    throw new Error(MessageForUser.NotFound);
   } catch (error) {
     rej(error);
   }

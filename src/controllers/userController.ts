@@ -3,6 +3,7 @@ import { checkArray, getPostData } from '../utils/common';
 import {
   findAll, findById, create, update, remove,
 } from '../models/userModel';
+import { MessageForUser } from '../types/constants';
 
 // @desc  Handle server error
 // @route any
@@ -12,11 +13,11 @@ export const handleErrorServer = async (
 ) => {
   try {
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: 'Ooops, something wrong! Server is broken' }));
+    res.end(JSON.stringify({ message: MessageForUser.ServerBrake }));
   } catch (error) {
     console.error(error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: 'Sorry, you broke server! Contact the administrator' }));
+    res.end(JSON.stringify({ message: MessageForUser.FatalServerBrake }));
   }
 };
 
@@ -28,7 +29,7 @@ export const errorNotFoundUser = async (
 ) => {
   try {
     res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: 'User Not Found' }));
+    res.end(JSON.stringify({ message: MessageForUser.NotFound }));
   } catch (error) {
     handleErrorServer(req, res);
   }
@@ -93,7 +94,7 @@ export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
 
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(
-      JSON.stringify({ message: "Body doen'nt contain required fields" }),
+      JSON.stringify({ message: MessageForUser.RequireBody }),
     );
   } catch (error) {
     handleErrorServer(req, res);
@@ -125,7 +126,7 @@ export const updateUser = async (
       ) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         return res.end(
-          JSON.stringify({ message: "Body doen'nt contain required fields" }),
+          JSON.stringify({ message: MessageForUser.RequireBody }),
         );
       }
 
@@ -177,7 +178,7 @@ export const errorNotValidId = async (
 ) => {
   try {
     res.writeHead(400, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: 'Not Valid id' }));
+    res.end(JSON.stringify({ message: MessageForUser.NotValidId }));
   } catch (error) {
     handleErrorServer(req, res);
   }
@@ -191,7 +192,7 @@ export const errorRouteNotFound = async (
 ) => {
   try {
     res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: 'Route Not Found' }));
+    res.end(JSON.stringify({ message: MessageForUser.RouteNotFound }));
   } catch (error) {
     handleErrorServer(req, res);
   }
