@@ -4,6 +4,22 @@ import {
   findAll, findById, create, update, remove,
 } from '../models/userModel';
 
+// @desc  Handle server error
+// @route any
+export const handleErrorServer = async (
+  req: IncomingMessage,
+  res: ServerResponse,
+) => {
+  try {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: 'Ooops, something wrong! Server is broken' }));
+  } catch (error) {
+    console.error(error);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: 'Sorry, you broke server! Contact the administrator' }));
+  }
+};
+
 // @desc  Gets Error with NOT FOUND
 // @route GET /api/users/:id
 export const errorNotFoundUser = async (
@@ -14,7 +30,7 @@ export const errorNotFoundUser = async (
     res.writeHead(404, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'User Not Found' }));
   } catch (error) {
-    console.log(error);
+    handleErrorServer(req, res);
   }
 };
 
@@ -27,7 +43,7 @@ export const getUsers = async (req: IncomingMessage, res: ServerResponse) => {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(users));
   } catch (error) {
-    console.log(error);
+    handleErrorServer(req, res);
   }
 };
 
@@ -80,7 +96,7 @@ export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
       JSON.stringify({ message: "Body doen'nt contain required fields" }),
     );
   } catch (error) {
-    console.log(error);
+    handleErrorServer(req, res);
   }
 
   return ServerResponse;
@@ -163,7 +179,7 @@ export const errorNotValidId = async (
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'Not Valid id' }));
   } catch (error) {
-    console.log(error);
+    handleErrorServer(req, res);
   }
 };
 
@@ -177,6 +193,6 @@ export const errorRouteNotFound = async (
     res.writeHead(404, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'Route Not Found' }));
   } catch (error) {
-    console.log(error);
+    handleErrorServer(req, res);
   }
 };
