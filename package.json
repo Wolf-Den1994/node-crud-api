@@ -4,7 +4,7 @@
   "description": "rss",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "cross-env NODE_TEST=test jest",
     "start:dev": "cross-env NODE_ENV=development nodemon",
     "start:prod": "cross-env NODE_ENV=production tsc && node dist/index.js",
     "start:multi": "cross-env NODE_MULTI=multi nodemon",

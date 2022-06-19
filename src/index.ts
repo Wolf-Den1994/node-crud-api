@@ -8,7 +8,7 @@ import {
   defaultPort, Processes, ApiRoute, RestMethod,
 } from './types/constants';
 
-const PORT = process.env.PORT || defaultPort;
+const PORT = process.env.NODE_TEST ? 5000 : (process.env.PORT || defaultPort);
 
 export const server = createServer((req: IncomingMessage, res: ServerResponse) => {
   try {
