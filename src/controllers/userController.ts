@@ -120,26 +120,26 @@ export const updateUser = async (
       const { username, age, hobbies } = JSON.parse(body);
 
       if (
-        (typeof username !== 'string' && username)
-        || (typeof age !== 'number' && age)
-        || (hobbies && !checkArray(hobbies))
+        typeof username === 'string'
+        && typeof age === 'number'
+        && checkArray(hobbies)
       ) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        return res.end(
-          JSON.stringify({ message: MessageForUser.RequireBody }),
-        );
+        const userData = {
+          username: username || user.username,
+          age: age || user.age,
+          hobbies: hobbies || user.hobbies,
+        };
+
+        const udpUser = await update(id, userData);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(udpUser));
       }
 
-      const userData = {
-        username: username || user.username,
-        age: age || user.age,
-        hobbies: hobbies || user.hobbies,
-      };
-
-      const udpUser = await update(id, userData);
-
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify(udpUser));
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      return res.end(
+        JSON.stringify({ message: MessageForUser.RequireBody }),
+      );
     }
   } catch (error) {
     errorNotFoundUser(req, res);
